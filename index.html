@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kim Nayoung · Portfolio</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+<style>
+  :root{
+    --navy:#1B365C;
+    --navy-soft:#264872;
+    --ivory:#F4F7FB;
+    --ivory-dim:#DCE6F2;
+    --coral:#7EA1C4;
+    --coral-deep:#5E83AB;
+    --ink:#1B365C;
+    --muted:#7A8AA0;
+    --line:rgba(27,54,92,.14);
+    --serif:'Pretendard',sans-serif;
+    --pad:clamp(24px,6vw,120px);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Pretendard',sans-serif;
+    background:var(--ivory);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    line-height:1.6;
+  }
+  ::selection{background:var(--coral);color:var(--ivory)}
+
+  /* ---------- side index nav ---------- */
+  .dotnav{
+    position:fixed;right:clamp(14px,2.4vw,34px);top:50%;
+    transform:translateY(-50%);z-index:60;
+    display:flex;flex-direction:column;gap:18px;
+  }
+  .dotnav a{
+    display:flex;align-items:center;gap:10px;justify-content:flex-end;
+    text-decoration:none;color:var(--muted);font-size:11px;
+    letter-spacing:.14em;font-weight:600;font-feature-settings:"tnum";
+  }
+  .dotnav a .lbl{opacity:0;transform:translateX(8px);transition:.32s ease;white-space:nowrap}
+  .dotnav a .tick{width:22px;height:2px;background:var(--line);transition:.32s ease}
+  .dotnav a:hover .lbl,.dotnav a.active .lbl{opacity:1;transform:translateX(0)}
+  .dotnav a.active{color:var(--coral)}
+  .dotnav a.active .tick{width:40px;background:var(--coral)}
+
+  /* ---------- shared section ---------- */
+  section{position:relative;padding:clamp(80px,11vh,150px) var(--pad)}
+  .idx{
+    font-size:clamp(13px,1vw,15px);font-weight:700;letter-spacing:.2em;
+    color:var(--coral);font-feature-settings:"tnum";margin-bottom:22px;
+    display:inline-flex;align-items:center;gap:12px;
+  }
+  .idx::after{content:"";width:54px;height:1px;background:var(--coral);opacity:.5}
+  .eyebrow{font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--muted);font-weight:600}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(34px);transition:opacity .9s cubic-bezier(.16,.84,.44,1),transform .9s cubic-bezier(.16,.84,.44,1)}
+  .reveal.in{opacity:1;transform:none}
+  .reveal.d1{transition-delay:.1s}.reveal.d2{transition-delay:.2s}
+  .reveal.d3{transition-delay:.3s}.reveal.d4{transition-delay:.4s}
+
+  /* ---------- 01 HERO ---------- */
+  .hero{
+    min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+    background:var(--navy);color:var(--ivory);overflow:hidden;
+  }
+  .hero .idx{color:var(--coral)}
+  .hero .idx::after{background:var(--coral)}
+  .grain{position:absolute;inset:0;opacity:.05;pointer-events:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  .hero-glow{position:absolute;width:60vw;height:60vw;right:-18vw;top:-18vw;border-radius:50%;
+    background:radial-gradient(circle,rgba(126,161,196,.35),transparent 65%);filter:blur(8px);pointer-events:none}
+  .hero-inner{position:relative;max-width:1200px;width:100%;margin:0 auto}
+  .hero h1{
+    font-size:clamp(56px,12vw,168px);line-height:.92;font-weight:800;
+    letter-spacing:-.03em;margin:8px 0 6px;
+  }
+  .hero h1 .ln{display:block;overflow:hidden}
+  .hero h1 .ln span{display:inline-block;transform:translateY(110%);animation:rise .95s cubic-bezier(.19,1,.22,1) forwards}
+  .hero h1 .ln:nth-child(2) span{animation-delay:.12s}
+  @keyframes rise{to{transform:translateY(0)}}
+  .hero .ko{font-size:clamp(20px,3.2vw,34px);font-weight:300;color:var(--ivory-dim);
+    letter-spacing:.04em;margin-bottom:34px;opacity:0;animation:fade 1s ease .55s forwards}
+  .tagline{font-size:clamp(16px,2vw,22px);max-width:560px;color:rgba(245,241,232,.8);
+    font-weight:300;opacity:0;animation:fade 1s ease .8s forwards}
+  .tagline b{color:var(--coral);font-weight:600}
+  @keyframes fade{to{opacity:1}}
+  .scrollcue{position:absolute;left:var(--pad);bottom:38px;display:flex;align-items:center;gap:12px;
+    color:rgba(245,241,232,.5);font-size:11px;letter-spacing:.3em;text-transform:uppercase;
+    opacity:0;animation:fade 1s ease 1.1s forwards}
+  .scrollcue .bar{width:1px;height:46px;background:rgba(245,241,232,.4);overflow:hidden;position:relative}
+  .scrollcue .bar::after{content:"";position:absolute;inset:0;background:var(--coral);
+    animation:drop 1.8s ease-in-out infinite}
+  @keyframes drop{0%{transform:translateY(-100%)}60%,100%{transform:translateY(100%)}}
+
+  /* ---------- 02 ABOUT ---------- */
+  .about{background:var(--ivory)}
+  .about-grid{display:grid;grid-template-columns:1fr 1.3fr;gap:clamp(40px,7vw,110px);align-items:start;max-width:1200px;margin:0 auto}
+  .about h2{font-size:clamp(28px,4vw,46px);font-weight:700;line-height:1.3;letter-spacing:-.02em;margin:10px 0 0}
+  .about h2 .hl{color:var(--coral)}
+  .about p{font-size:clamp(15px,1.4vw,18px);color:#3a4654;margin-top:26px;max-width:52ch}
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:32px}
+  .chip{border:1px solid var(--line);border-radius:40px;padding:9px 18px;font-size:13px;
+    font-weight:500;color:var(--navy);transition:.3s}
+  .chip:hover{background:var(--navy);color:var(--ivory);border-color:var(--navy);transform:translateY(-2px)}
+
+  /* ---------- 03 SKILLS ---------- */
+  .skills{background:var(--navy);color:var(--ivory);overflow:hidden;position:relative}
+  .skills .idx{color:var(--coral)}.skills .idx::after{background:var(--coral)}
+  .skills .grain{opacity:.04}
+  .sk-head{max-width:1200px;margin:0 auto 56px;position:relative}
+  .sk-head h2{font-size:clamp(28px,4.4vw,52px);font-weight:800;letter-spacing:-.025em;margin-top:8px;line-height:1.1}
+  .sk-head h2 .red{color:var(--coral)}
+  .sk-wrap{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(36px,5vw,80px);align-items:start}
+
+  /* skill bars (개발자 스타일) */
+  .sk-bars{display:flex;flex-direction:column;gap:26px}
+  .sk-bar .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+  .sk-bar .nm{font-size:clamp(15px,1.6vw,19px);font-weight:700;letter-spacing:-.01em}
+  .sk-bar .nm small{font-weight:400;color:var(--ivory-dim);font-size:13px;margin-left:8px}
+  .sk-bar .pct{font-size:13px;font-weight:700;color:var(--coral);font-feature-settings:"tnum"}
+  .sk-track{height:8px;border-radius:8px;background:rgba(245,247,251,.12);overflow:hidden;position:relative}
+  .sk-fill{height:100%;border-radius:8px;width:0;
+    background:linear-gradient(90deg,var(--coral-deep),var(--coral));
+    transition:width 1.3s cubic-bezier(.16,.84,.44,1);position:relative}
+  .skills .in .sk-fill{width:var(--w)}
+  .sk-fill::after{content:"";position:absolute;top:0;right:0;width:30px;height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.5));opacity:.7}
+
+  /* certificate cards */
+  .sk-certs{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .cert{background:rgba(245,247,251,.05);border:1px solid rgba(245,247,251,.12);border-radius:12px;
+    padding:22px 20px;position:relative;overflow:hidden;
+    opacity:0;transform:translateY(24px) scale(.96);
+    transition:opacity .7s ease,transform .7s cubic-bezier(.16,.84,.44,1),border-color .35s,background .35s}
+  .skills .in .cert{opacity:1;transform:none}
+  .skills .in .cert:nth-child(1){transition-delay:.15s}
+  .skills .in .cert:nth-child(2){transition-delay:.28s}
+  .skills .in .cert:nth-child(3){transition-delay:.41s}
+  .skills .in .cert:nth-child(4){transition-delay:.54s}
+  .cert:hover{border-color:var(--coral);background:rgba(126,161,196,.12);transform:translateY(-4px)}
+  .cert .badge{width:38px;height:38px;border-radius:9px;display:grid;place-items:center;
+    background:var(--coral);color:var(--navy);margin-bottom:16px;font-weight:800;font-size:15px}
+  .cert h4{font-size:15.5px;font-weight:700;letter-spacing:-.01em;line-height:1.35}
+  .cert .lv{font-size:12.5px;color:var(--coral);font-weight:600;margin-top:6px;letter-spacing:.02em}
+  .cert .deco{position:absolute;right:-20px;bottom:-20px;font-size:80px;font-weight:800;
+    color:rgba(245,247,251,.04);line-height:1;pointer-events:none}
+  .sk-certs-title{grid-column:1/-1;font-size:12px;letter-spacing:.3em;text-transform:uppercase;
+    color:var(--ivory-dim);font-weight:600;margin-bottom:2px}
+
+  /* video tools row */
+  .sk-tools{grid-column:1/-1;max-width:1200px;margin:clamp(40px,5vw,64px) auto 0;
+    border-top:1px solid rgba(245,247,251,.14);padding-top:34px;
+    display:flex;flex-wrap:wrap;align-items:center;gap:clamp(16px,3vw,40px)}
+  .sk-tools .label{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--ivory-dim);font-weight:600}
+  .tool-pill{display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(245,247,251,.2);
+    border-radius:40px;padding:11px 22px;font-weight:600;font-size:15px;transition:.35s;cursor:default}
+  .tool-pill:hover{background:var(--coral);color:var(--navy);border-color:var(--coral);transform:translateY(-3px)}
+  .tool-pill .dot{width:9px;height:9px;border-radius:50%;background:var(--coral)}
+  .tool-pill:hover .dot{background:var(--navy)}
+
+  /* ---------- 04 CAREER ---------- */
+  .career{background:var(--ivory);color:var(--ink)}
+  .career .idx{color:var(--coral-deep)}.career .idx::after{background:var(--coral-deep)}
+  .career h2{font-size:clamp(28px,4vw,46px);font-weight:700;letter-spacing:-.02em;margin-bottom:50px;max-width:1200px;margin-left:auto;margin-right:auto;color:var(--navy)}
+  .timeline{max-width:1200px;margin:0 auto;position:relative}
+  .tl-item{display:grid;grid-template-columns:140px 1fr;gap:clamp(20px,4vw,60px);
+    padding:30px 0;border-top:1px solid var(--line);position:relative}
+  .tl-item:last-child{border-bottom:1px solid var(--line)}
+  .tl-year{font-size:14px;font-weight:700;letter-spacing:.08em;color:var(--coral-deep);font-feature-settings:"tnum";padding-top:4px}
+  .tl-role{font-size:clamp(20px,2.4vw,30px);font-weight:700;letter-spacing:-.01em;color:var(--navy)}
+  .tl-org{font-size:15px;color:var(--muted);margin-top:6px;font-weight:500}
+  .tl-desc{font-size:14.5px;color:#3a4654;margin-top:12px;max-width:56ch;font-weight:400}
+  .tl-item .num{position:absolute;right:0;top:24px;font-size:clamp(40px,6vw,84px);font-weight:800;
+    color:rgba(27,54,92,.06);font-feature-settings:"tnum";line-height:1;pointer-events:none}
+
+  /* ---------- 04 WORKS ---------- */
+  .works{background:var(--ivory)}
+  .works-head{max-width:1200px;margin:0 auto 50px}
+  .works h2{font-size:clamp(28px,4vw,46px);font-weight:700;letter-spacing:-.02em;margin-top:8px}
+  .work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2.4vw,32px);max-width:1200px;margin:0 auto}
+  .work{position:relative;border-radius:4px;overflow:hidden;background:var(--navy);
+    aspect-ratio:4/5;cursor:pointer;transition:transform .5s cubic-bezier(.16,.84,.44,1),box-shadow .5s}
+  .work:hover{transform:translateY(-8px);box-shadow:0 24px 50px -20px rgba(27,54,92,.45)}
+  .work .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    color:rgba(245,241,232,.35);gap:14px;transition:.5s;
+    background:linear-gradient(145deg,var(--navy-soft),var(--navy))}
+  .work:hover .ph{opacity:.18}
+  .work .ph svg{width:42px;height:42px;stroke:currentColor;fill:none;stroke-width:1.4}
+  .work .ph .ptxt{font-size:11px;letter-spacing:.2em;text-transform:uppercase}
+  .work img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  .work-meta{position:absolute;left:0;right:0;bottom:0;padding:22px;z-index:3;
+    background:linear-gradient(transparent,rgba(27,54,92,.94));color:var(--ivory);
+    transform:translateY(8px);opacity:.92;transition:.45s}
+  .work:hover .work-meta{transform:translateY(0);opacity:1}
+  .work-meta .wnum{font-size:11px;letter-spacing:.2em;color:var(--coral);font-weight:700}
+  .work-meta h3{font-size:18px;font-weight:700;margin-top:6px;letter-spacing:-.01em}
+  .work-meta .wrole{font-size:12.5px;color:rgba(245,241,232,.7);margin-top:3px;font-weight:300}
+  .work-note{max-width:1200px;margin:26px auto 0;font-size:12.5px;color:var(--muted);font-style:italic}
+
+  /* ---------- 05 YOUTUBE ---------- */
+  .youtube{background:var(--navy);color:var(--ivory);overflow:hidden;position:relative}
+  .youtube .idx{color:var(--coral)}.youtube .idx::after{background:var(--coral)}
+  .yt-inner{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;align-items:center;text-align:center}
+  .yt-inner .idx{justify-content:center}
+  .yt-inner h2{font-size:clamp(28px,4.4vw,52px);font-weight:800;letter-spacing:-.025em;line-height:1.08}
+  .yt-inner h2 .red{color:var(--coral)}
+  .yt-inner p{font-size:clamp(15px,1.4vw,18px);color:rgba(245,241,232,.72);margin-top:26px;max-width:56ch;font-weight:300}
+  .yt-btn{display:inline-flex;align-items:center;gap:12px;margin-top:34px;background:var(--coral);
+    color:var(--navy);text-decoration:none;padding:15px 28px;border-radius:46px;font-weight:700;font-size:15px;
+    transition:.3s}
+  .yt-btn:hover{background:var(--ivory);transform:translateY(-2px);gap:16px}
+  .yt-btn svg{width:20px;height:20px;fill:currentColor}
+  .yt-visual{aspect-ratio:1;border-radius:50%;position:relative;display:grid;place-items:center}
+  .yt-ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(245,241,232,.16)}
+  .yt-ring.r2{inset:14%;animation:spin 22s linear infinite}
+  .yt-ring.r3{inset:28%;border-color:rgba(126,161,196,.55);animation:spin 16s linear infinite reverse}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .yt-play{width:38%;aspect-ratio:1;background:var(--coral);border-radius:50%;display:grid;place-items:center;
+    box-shadow:0 0 60px rgba(126,161,196,.5)}
+  .yt-play svg{width:36%;fill:var(--navy)}
+  .yt-img{position:relative;width:100%;max-width:620px;margin:clamp(34px,4vw,48px) auto 0;
+    aspect-ratio:16/9;border-radius:14px;overflow:hidden;display:block;
+    background:linear-gradient(145deg,var(--navy-soft),var(--navy));
+    border:1px solid rgba(245,247,251,.14);
+    box-shadow:0 18px 50px -24px rgba(0,0,0,.6);
+    transition:transform .5s cubic-bezier(.16,.84,.44,1),box-shadow .5s}
+  .yt-img:hover{transform:translateY(-6px);box-shadow:0 30px 60px -24px rgba(0,0,0,.6)}
+  .yt-img::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+    background:linear-gradient(transparent 55%,rgba(14,20,32,.55));opacity:.7;transition:.4s}
+  .yt-img:hover::after{opacity:.4}
+  .yt-img .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:14px;color:rgba(245,247,251,.35)}
+  .yt-img .ph svg{width:54px;height:54px;fill:currentColor}
+  .yt-img .ph .ptxt{font-size:11px;letter-spacing:.2em;text-transform:uppercase}
+  .yt-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  .yt-handle{position:absolute;left:16px;bottom:16px;z-index:3;display:inline-flex;align-items:center;gap:8px;
+    background:rgba(14,20,32,.6);backdrop-filter:blur(6px);color:var(--ivory);
+    padding:9px 16px;border-radius:40px;font-size:14px;font-weight:700;letter-spacing:-.01em;
+    border:1px solid rgba(245,247,251,.18)}
+  .yt-handle .dot{width:8px;height:8px;border-radius:50%;background:var(--coral);
+    box-shadow:0 0 0 0 rgba(126,161,196,.6);animation:pulse 2s ease-out infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(126,161,196,.55)}70%{box-shadow:0 0 0 10px rgba(126,161,196,0)}100%{box-shadow:0 0 0 0 rgba(126,161,196,0)}}
+
+  /* ---------- 07 CONTACT (finale) ---------- */
+  .contact{background:var(--navy);color:var(--ivory);text-align:center;overflow:hidden;position:relative;
+    min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+    padding-top:clamp(80px,11vh,150px);padding-bottom:clamp(50px,7vh,90px)}
+  .contact .grain{opacity:.05}
+  /* floating blobs */
+  .c-blob{position:absolute;border-radius:50%;pointer-events:none;filter:blur(8px)}
+  .c-blob.b1{width:46vw;height:46vw;left:-16vw;top:-12vw;
+    background:radial-gradient(circle,rgba(126,161,196,.3),transparent 65%);animation:float1 14s ease-in-out infinite}
+  .c-blob.b2{width:40vw;height:40vw;right:-14vw;bottom:-12vw;
+    background:radial-gradient(circle,rgba(126,161,196,.22),transparent 65%);animation:float2 18s ease-in-out infinite}
+  @keyframes float1{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,30px)}}
+  @keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(-40px,-30px)}}
+  .contact-inner{position:relative;z-index:2;max-width:900px;margin:0 auto;width:100%;padding:0 var(--pad)}
+  .contact .idx{justify-content:center;color:var(--coral)}.contact .idx::after{display:none}
+  .contact .eyebrow{color:var(--ivory-dim)}
+  .c-headline{font-size:clamp(30px,5.6vw,72px);font-weight:800;letter-spacing:-.03em;line-height:1.04;margin:18px 0 16px}
+  .c-headline .ln{display:block;overflow:hidden;white-space:nowrap}
+  .c-headline .ln span{display:inline-block;transform:translateY(110%);transition:transform 1s cubic-bezier(.19,1,.22,1)}
+  .contact.in .c-headline .ln span{transform:translateY(0)}
+  .contact.in .c-headline .ln:nth-child(2) span{transition-delay:.12s}
+  .c-headline .red{color:var(--coral)}
+  .c-sub{font-size:clamp(15px,1.6vw,19px);color:rgba(245,247,251,.7);font-weight:300;max-width:46ch;margin:0 auto 50px;
+    opacity:0;transform:translateY(20px);transition:.9s ease .4s}
+  .contact.in .c-sub{opacity:1;transform:none}
+  .c-cards{display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:680px;margin:0 auto}
+  .c-card{display:flex;align-items:center;gap:16px;text-align:left;text-decoration:none;
+    background:rgba(245,247,251,.05);border:1px solid rgba(245,247,251,.14);border-radius:16px;
+    padding:22px 24px;color:var(--ivory);
+    opacity:0;transform:translateY(28px) scale(.97);
+    transition:opacity .8s ease,transform .8s cubic-bezier(.16,.84,.44,1),border-color .35s,background .35s}
+  .contact.in .c-card{opacity:1;transform:none}
+  .contact.in .c-card:nth-child(1){transition-delay:.55s}
+  .contact.in .c-card:nth-child(2){transition-delay:.7s}
+  .c-card:hover{border-color:var(--coral);background:rgba(126,161,196,.14);transform:translateY(-5px)}
+  .c-card .ico{width:48px;height:48px;border-radius:12px;flex-shrink:0;display:grid;place-items:center;
+    background:var(--coral);color:var(--navy);transition:.35s}
+  .c-card:hover .ico{transform:rotate(-6deg) scale(1.06)}
+  .c-card .ico svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8}
+  .c-card .v{font-size:clamp(13px,1.4vw,16px);font-weight:700;word-break:break-all}
+  footer{position:relative;z-index:2;margin:clamp(50px,7vh,80px) auto 0;font-size:12px;
+    color:rgba(245,247,251,.5);letter-spacing:.08em}
+  .footer-mark{font-size:13px;letter-spacing:.4em;text-transform:uppercase;color:var(--coral);
+    font-weight:700;margin-bottom:14px;
+    opacity:0;transition:.9s ease .9s}
+  .contact.in .footer-mark{opacity:1}
+
+  @media(max-width:820px){
+    .dotnav{display:none}
+    .about-grid,.yt-inner{grid-template-columns:1fr}
+    .work-grid{grid-template-columns:1fr;max-width:420px}
+    .tl-item{grid-template-columns:1fr;gap:6px}
+    .tl-item .num{display:none}
+    .yt-visual{max-width:300px;margin:10px auto 0}
+  }
+</style>
+</head>
+<body>
+
+<!-- side index nav -->
+<nav class="dotnav" aria-label="섹션 인덱스">
+  <a href="#sec01" data-i="01"><span class="lbl">Intro</span><span class="tick"></span></a>
+  <a href="#sec02" data-i="02"><span class="lbl">About</span><span class="tick"></span></a>
+  <a href="#sec03" data-i="03"><span class="lbl">Skills</span><span class="tick"></span></a>
+  <a href="#sec04" data-i="04"><span class="lbl">Career</span><span class="tick"></span></a>
+  <a href="#sec05" data-i="05"><span class="lbl">Works</span><span class="tick"></span></a>
+  <a href="#sec06" data-i="06"><span class="lbl">YouTube</span><span class="tick"></span></a>
+  <a href="#sec07" data-i="07"><span class="lbl">Contact</span><span class="tick"></span></a>
+</nav>
+
+<!-- 01 HERO -->
+<section class="hero" id="sec01">
+  <div class="grain"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <span class="idx">01 — Intro</span>
+    <h1>
+      <span class="ln"><span>KIM</span></span>
+      <span class="ln"><span>NAYOUNG</span></span>
+    </h1>
+    <div class="ko">김나영 · 영상 콘텐츠 에디터</div>
+    <p class="tagline">사람과 이야기를 <b>영상의 언어</b>로 옮기는 사람.<br>기획부터 구성 편집까지 — 한 편의 콘텐츠를 끝까지 책임집니다.</p>
+  </div>
+  <div class="scrollcue"><span>Scroll &nbsp;·&nbsp; ↑ ↓ 키로 이동</span><span class="bar"></span></div>
+</section>
+
+<!-- 02 ABOUT -->
+<section class="about" id="sec02">
+  <div class="about-grid">
+    <div class="reveal">
+      <span class="idx">02 — About</span>
+      <span class="eyebrow">자기소개</span>
+    </div>
+    <div>
+      <h2 class="reveal d1">한국외대에서 <span class="hl">미디어와 언어</span>를 전공한,<br>이론과 실무를 모두 아는<br>영상 에디터입니다.</h2>
+      <p class="reveal d2">언어로 길러온 문화적 맥락을 읽는 감각을,<br>다른 문화권 시청자에게도 가닿는 영상 기획과 구성으로 풀어냅니다.<br>언어와 미디어를 함께 다룰 수 있다는 점이 저만의 경쟁력입니다.<br><br>강의실에서 사람을 가르치고, 방송 현장에서 서버테이커로 일하며, 영상을 한 컷 한 컷 다듬어 왔습니다. 글로 기획하고 손으로 완성하는 전 과정을 경험한 것이 저의 가장 큰 강점입니다. 시청자에게 정확하게 전달되는 영상, 그리고 끝까지 보게 만드는 리듬을 늘 고민합니다.</p>
+      <div class="chips reveal d3">
+        <span class="chip">기획 · 구성</span>
+        <span class="chip">편집 (Premiere)</span>
+        <span class="chip">방송 작가</span>
+        <span class="chip">서버테이커 (BIS)</span>
+        <span class="chip">콘텐츠 운영</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 SKILLS -->
+<section class="skills" id="sec03">
+  <div class="grain"></div>
+  <div class="sk-head reveal">
+    <span class="idx">03 — Skills</span>
+    <span class="eyebrow">보유 역량 &amp; 자격증</span>
+    <h2>이런 걸 <span class="red">할 수 있어요</span></h2>
+  </div>
+  <div class="sk-wrap reveal">
+    <!-- LEFT: skill bars -->
+    <div class="sk-bars">
+      <div class="sk-bar">
+        <div class="top"><span class="nm">영상 편집 <small>Premiere Pro · Vegas</small></span><span class="pct">90%</span></div>
+        <div class="sk-track"><div class="sk-fill" style="--w:90%"></div></div>
+      </div>
+      <div class="sk-bar">
+        <div class="top"><span class="nm">포토샵 <small>Adobe Photoshop</small></span><span class="pct">90%</span></div>
+        <div class="sk-track"><div class="sk-fill" style="--w:90%"></div></div>
+      </div>
+      <div class="sk-bar">
+        <div class="top"><span class="nm">문서 작성 <small>Word · 한글</small></span><span class="pct">95%</span></div>
+        <div class="sk-track"><div class="sk-fill" style="--w:95%"></div></div>
+      </div>
+      <div class="sk-bar">
+        <div class="top"><span class="nm">엑셀 <small>Excel · 데이터 정리</small></span><span class="pct">85%</span></div>
+        <div class="sk-track"><div class="sk-fill" style="--w:85%"></div></div>
+      </div>
+      <div class="sk-bar">
+        <div class="top"><span class="nm">기획 · 구성 <small>기획 &amp; 대본</small></span><span class="pct">90%</span></div>
+        <div class="sk-track"><div class="sk-fill" style="--w:90%"></div></div>
+      </div>
+    </div>
+    <!-- RIGHT: certificates -->
+    <div class="sk-certs">
+      <span class="sk-certs-title">Certificates · 자격증</span>
+      <div class="cert">
+        <div class="badge">1급</div>
+        <h4>GTQ 포토샵<br>그래픽기술자격</h4>
+        <div class="lv">1급 취득</div>
+        <span class="deco">PS</span>
+      </div>
+      <div class="cert">
+        <div class="badge">1급</div>
+        <h4>워드프로세서</h4>
+        <div class="lv">1급 취득</div>
+        <span class="deco">W</span>
+      </div>
+      <div class="cert">
+        <div class="badge">XL</div>
+        <h4>컴퓨터활용능력<br>(엑셀)</h4>
+        <div class="lv">자격 보유</div>
+        <span class="deco">XL</span>
+      </div>
+      <div class="cert">
+        <div class="badge">▶</div>
+        <h4>영상 편집<br>실무 역량</h4>
+        <div class="lv">Premiere · Vegas</div>
+        <span class="deco">▶</span>
+      </div>
+    </div>
+    <!-- video tools row -->
+    <div class="sk-tools">
+      <span class="label">Video Editing Tools</span>
+      <span class="tool-pill"><span class="dot"></span>Adobe Premiere Pro</span>
+      <span class="tool-pill"><span class="dot"></span>Sony Vegas Pro</span>
+    </div>
+  </div>
+</section>
+
+<!-- 04 CAREER -->
+<section class="career" id="sec04">
+  <h2 class="reveal"><span class="idx">04 — Career</span><br>걸어온 길</h2>
+  <div class="timeline">
+    <div class="tl-item reveal">
+      <div class="tl-year">4 YRS</div>
+      <div>
+        <div class="tl-role">학원 강사</div>
+        <div class="tl-org">교육 · 강의</div>
+        <div class="tl-desc">4년간 학생들을 가르치며 복잡한 내용을 쉽고 명확하게 전달하는 법을 익혔습니다.<br>메시지를 구조화하는 이 감각은 영상 구성에도 그대로 이어집니다.</div>
+      </div>
+      <span class="num">01</span>
+    </div>
+    <div class="tl-item reveal">
+      <div class="tl-year">1 YR</div>
+      <div>
+        <div class="tl-role">취재작가</div>
+        <div class="tl-org">KTV 국민방송</div>
+        <div class="tl-desc">방송 현장에서 1년간 구성과 서버를 담당했습니다. 대본 및 아이템 정리, 자료조사, 프롬프터까지 — 방송 콘텐츠가 만들어지는 전 과정을 현장에서 체득했습니다.</div>
+      </div>
+      <span class="num">02</span>
+    </div>
+    <div class="tl-item reveal">
+      <div class="tl-year">EXP</div>
+      <div>
+        <div class="tl-role">영상 편집 담당</div>
+        <div class="tl-org">서현 커뮤니케이션</div>
+        <div class="tl-desc">홍보 영상과 의뢰 콘텐츠의 편집을 전담했습니다. 클라이언트의 의도를 정확히 읽고<br>영상의 톤과 호흡으로 풀어내는 작업을 맡았습니다.</div>
+      </div>
+      <span class="num">03</span>
+    </div>
+  </div>
+</section>
+
+<!-- 05 WORKS -->
+<section class="works" id="sec05">
+  <div class="works-head reveal">
+    <span class="idx">05 — Works</span>
+    <span class="eyebrow">대표 영상 작업물</span>
+    <h2>직접 만든 영상들</h2>
+  </div>
+  <div class="work-grid">
+    <div class="work reveal" data-img="국가유산청">
+      <div class="ph"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/></svg><span class="ptxt">Image 01</span></div>
+      <img src="work1.jpg" alt="국가유산청 제작 영상" onerror="this.style.display='none'">
+      <div class="work-meta"><span class="wnum">WORK 01</span><h3>국가유산청 제작 영상</h3><div class="wrole">기획 · 자료조사 · 편집</div></div>
+    </div>
+    <div class="work reveal d1" data-img="바로그집">
+      <div class="ph"><svg viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5V21H3z M9 21v-7h6v7"/></svg><span class="ptxt">Image 02</span></div>
+      <img src="work2.jpg" alt="바로그집 홍보 영상" onerror="this.style.display='none'">
+      <div class="work-meta"><span class="wnum">WORK 02</span><h3>바로그집 홍보 영상</h3><div class="wrole">기획 · 편집</div></div>
+    </div>
+    <div class="work reveal d2" data-img="LID">
+      <div class="ph"><svg viewBox="0 0 24 24"><path d="M4 4h16v12H4z M4 20h16 M10 10l4 2-4 2z"/></svg><span class="ptxt">Image 03</span></div>
+      <img src="work3.jpg" alt="LID 홍보 영상" onerror="this.style.display='none'">
+      <div class="work-meta"><span class="wnum">WORK 03</span><h3>LID 홍보 영상</h3><div class="wrole">홍보 영상 · 편집</div></div>
+    </div>
+  </div>
+  <p class="work-note">※ 이미지 3장(국가유산청 · 바로그집 · LID 홍보)을 전달해 주시면 위 자리에 바로 넣어 드립니다.</p>
+</section>
+
+<!-- 06 YOUTUBE -->
+<section class="youtube" id="sec06">
+  <div class="yt-inner">
+    <div>
+      <span class="idx">06 — YouTube</span>
+      <h2 class="reveal">개인 <span class="red">유튜브 채널</span>을<br>직접 운영했습니다</h2>
+      <p class="reveal d1">기획·촬영·편집을 혼자 도맡아 개인 채널을 운영하며, 콘텐츠를 처음부터 끝까지 완성하는 힘과 꾸준함을 길렀습니다. 시청자의 반응을 데이터로 읽고 다음 콘텐츠에 반영하는 운영 감각도 이 과정에서 얻었습니다.</p>
+      <a class="yt-btn reveal d2" href="https://www.youtube.com/channel/UCFqCPESJTHaK3Rr2WbzV8hg" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M23 7.5a3 3 0 0 0-2.1-2.1C19 5 12 5 12 5s-7 0-8.9.4A3 3 0 0 0 1 7.5 31 31 0 0 0 .6 12 31 31 0 0 0 1 16.5a3 3 0 0 0 2.1 2.1C5 19 12 19 12 19s7 0 8.9-.4a3 3 0 0 0 2.1-2.1A31 31 0 0 0 23.4 12 31 31 0 0 0 23 7.5zM9.8 15.3V8.7l5.7 3.3z"/></svg>
+        채널 바로가기
+      </a>
+    </div>
+    <a class="yt-img reveal d1" href="https://www.youtube.com/channel/UCFqCPESJTHaK3Rr2WbzV8hg" target="_blank" rel="noopener">
+      <div class="ph"><svg viewBox="0 0 24 24"><path d="M23 7.5a3 3 0 0 0-2.1-2.1C19 5 12 5 12 5s-7 0-8.9.4A3 3 0 0 0 1 7.5 31 31 0 0 0 .6 12 31 31 0 0 0 1 16.5a3 3 0 0 0 2.1 2.1C5 19 12 19 12 19s7 0 8.9-.4a3 3 0 0 0 2.1-2.1A31 31 0 0 0 23.4 12 31 31 0 0 0 23 7.5zM9.8 15.3V8.7l5.7 3.3z"/></svg><span class="ptxt">YouTube Image</span></div>
+      <img src="youtube.jpg" alt="나화 Nahwa 유튜브 채널" onerror="this.style.display='none'">
+      <div class="yt-handle"><span class="dot"></span>나화 Nahwa</div>
+    </a>
+  </div>
+</section>
+
+<!-- 07 CONTACT (finale) -->
+<section class="contact reveal" id="sec07">
+  <div class="grain"></div>
+  <span class="c-blob b1"></span>
+  <span class="c-blob b2"></span>
+  <div class="contact-inner">
+    <span class="idx">07 — Contact</span>
+    <span class="eyebrow">여기까지 봐주셔서 감사합니다</span>
+    <h2 class="c-headline">
+      <span class="ln"><span>함께 좋은 이야기를</span></span>
+      <span class="ln"><span><span class="red">만들고 싶습니다</span></span></span>
+    </h2>
+    <p class="c-sub">새로운 기회 앞에 선 신입의 마음으로, 배우고 성장하며 좋은 콘텐츠로 보답하겠습니다. 편하게 연락 주세요.</p>
+    <div class="c-cards">
+      <a class="c-card" href="mailto:rlaskdud9596@gmail.com">
+        <span class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span>
+        <span class="v">rlaskdud9596@gmail.com</span>
+      </a>
+      <a class="c-card" href="tel:01024939596">
+        <span class="ico"><svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg></span>
+        <span class="v">010-2493-9596</span>
+      </a>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-mark">Kim Nayoung</div>
+    © 2026 김나영 · Portfolio
+  </footer>
+</section>
+
+<script>
+  // reveal on scroll
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.16});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // active index nav
+  const links=[...document.querySelectorAll('.dotnav a')];
+  const secs=links.map(l=>document.querySelector(l.getAttribute('href')));
+  let current=0;
+  const nav=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){const i=secs.indexOf(e.target);if(i>-1){current=i;}links.forEach(l=>l.classList.remove('active'));if(links[i])links[i].classList.add('active');}})},{threshold:.5});
+  secs.forEach(s=>s&&nav.observe(s));
+
+  // keyboard section navigation
+  let scrolling=false;
+  function go(i){
+    i=Math.max(0,Math.min(secs.length-1,i));
+    if(!secs[i])return;
+    current=i;scrolling=true;
+    secs[i].scrollIntoView({behavior:'smooth'});
+    setTimeout(()=>scrolling=false,650);
+  }
+  window.addEventListener('keydown',(e)=>{
+    const t=e.target.tagName;
+    if(t==='INPUT'||t==='TEXTAREA')return;
+    switch(e.key){
+      case 'ArrowDown': case 'PageDown': case ' ':
+        e.preventDefault(); go(current+1); break;
+      case 'ArrowUp': case 'PageUp':
+        e.preventDefault(); go(current-1); break;
+      case 'Home':
+        e.preventDefault(); go(0); break;
+      case 'End':
+        e.preventDefault(); go(secs.length-1); break;
+    }
+  });
+</script>
+</body>
+</html>
